@@ -1,0 +1,666 @@
+/* ============================================
+   Bitcoin Wealth Comparison - Theme System
+   Inspired by mempool.space design language
+   ============================================ */
+
+/* CSS Custom Properties for Light Theme */
+:root,
+[data-theme="light"],
+.light-theme {
+  /* === PRIMARY COLORS === */
+  --bitcoin-orange: #F7931A;
+  --bitcoin-orange-hover: #e68509;
+  --bitcoin-orange-light: #fef3e6;
+  
+  /* === BACKGROUND COLORS === */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --bg-accent: #e5e7eb;
+  
+  /* === TEXT COLORS === */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-inverse: #ffffff;
+  
+  /* === BORDER COLORS === */
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --border-accent: #9ca3af;
+  
+  /* === SHADOW COLORS === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* === STATUS COLORS === */
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  --error: #ef4444;
+  --error-bg: #fef2f2;
+  --warning: #f59e0b;
+  --warning-bg: #fffbeb;
+  --info: #3b82f6;
+  --info-bg: #eff6ff;
+}
+
+/* Specific fallbacks for critical elements - ensures styles work even if theme fails */
+body {
+  background-color: var(--bg-secondary, #f9fafb);
+  color: var(--text-primary, #111827);
+}
+
+html {
+  background-color: var(--bg-secondary, #f9fafb);
+}
+
+/* Fallbacks for common theme-dependent elements */
+.chart-container {
+  background-color: var(--bg-primary, #ffffff);
+  border-color: var(--border-primary, #e5e7eb);
+}
+
+input {
+  background-color: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #111827);
+  border-color: var(--border-primary, #e5e7eb);
+}
+
+button {
+  color: var(--text-primary, #111827);
+}
+
+/* CSS Custom Properties for Dark Theme (Modern sophisticated design) */
+[data-theme="dark"],
+.dark-theme {
+  /* === PRIMARY COLORS === */
+  --bitcoin-orange: #F7931A;
+  --bitcoin-orange-hover: #ff9f2e;
+  --bitcoin-orange-light: rgba(247, 147, 26, 0.1);
+  --bitcoin-orange-glow: rgba(247, 147, 26, 0.3);
+  
+  /* === SOPHISTICATED BACKGROUND COLORS === */
+  --bg-primary: #0f172a;       /* Deep slate blue - main background */
+  --bg-secondary: #1e293b;     /* Elevated slate blue - secondary areas */
+  --bg-tertiary: #334155;      /* Card backgrounds with elevation */
+  --bg-accent: #475569;        /* Interactive element backgrounds */
+  --bg-elevated: #64748b;      /* Highest elevation elements */
+  
+  /* === WARM OVERLAY BACKGROUNDS === */
+  --bg-warm-overlay: rgba(15, 23, 42, 0.95);     /* Warm dark overlay */
+  --bg-glass: rgba(51, 65, 85, 0.8);             /* Glass effect background */
+  --bg-gradient-start: #0f172a;                   /* Gradient start */
+  --bg-gradient-end: #1e293b;                     /* Gradient end */
+  
+  /* === REFINED TEXT COLORS === */
+  --text-primary: #f8fafc;     /* Warm white for primary text */
+  --text-secondary: #e2e8f0;   /* Secondary text with warmth */
+  --text-muted: #94a3b8;       /* Muted text with blue tint */
+  --text-accent: #cbd5e1;      /* Accent text color */
+  --text-inverse: #0f172a;     /* Inverse text for light backgrounds */
+  
+  /* === SOPHISTICATED BORDER COLORS === */
+  --border-primary: rgba(148, 163, 184, 0.2);    /* Subtle borders */
+  --border-secondary: rgba(148, 163, 184, 0.3);  /* More visible borders */
+  --border-accent: rgba(148, 163, 184, 0.4);     /* Accent borders */
+  --border-interactive: rgba(247, 147, 26, 0.5); /* Interactive element borders */
+  
+  /* === ENHANCED SHADOW SYSTEM === */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+  
+  /* === MODERN STATUS COLORS === */
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --success-border: rgba(16, 185, 129, 0.3);
+  --error: #ef4444;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --error-border: rgba(239, 68, 68, 0.3);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --warning-border: rgba(245, 158, 11, 0.3);
+  --info: #3b82f6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  --info-border: rgba(59, 130, 246, 0.3);
+  
+  /* === SPECIAL EFFECTS === */
+  --glow-bitcoin: 0 0 20px var(--bitcoin-orange-glow);
+  --glow-subtle: 0 0 15px rgba(148, 163, 184, 0.1);
+  --backdrop-blur: blur(20px);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+* {
+  transition: background-color 0.15s ease-out, 
+              border-color 0.15s ease-out,
+              color 0.15s ease-out,
+              box-shadow 0.15s ease-out;
+}
+
+/* Faster transitions for interactive elements to prevent hanging feel */
+button, input, .theme-toggle-button {
+  transition: background-color 0.1s ease-out,
+              border-color 0.1s ease-out,
+              color 0.1s ease-out,
+              box-shadow 0.1s ease-out;
+}
+
+/* Disable transitions during initial load to prevent hanging */
+.no-transitions * {
+  transition: none !important;
+}
+
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ============================================
+   COMPONENT OVERRIDES
+   ============================================ */
+
+/* Cards and Panels */
+.chart-container,
+.bg-white {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-primary) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Text Colors */
+.text-gray-800,
+.text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-600,
+.text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.text-gray-500,
+.text-gray-400 {
+  color: var(--text-muted) !important;
+}
+
+.text-white {
+  color: var(--text-primary) !important;
+}
+
+/* Dark mode specific text colors */
+[data-theme="dark"] .text-gray-300 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-gray-200 {
+  color: var(--text-accent) !important;
+}
+
+/* Borders */
+.border-gray-300,
+.border-gray-200 {
+  border-color: var(--border-primary) !important;
+}
+
+/* Input Fields */
+input[type="number"],
+input[type="text"],
+input {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+input:focus {
+  border-color: var(--bitcoin-orange) !important;
+  box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.1) !important;
+}
+
+/* Buttons */
+.bg-blue-600 {
+  background-color: var(--bitcoin-orange) !important;
+}
+
+.bg-blue-600:hover,
+.hover\:bg-blue-700:hover {
+  background-color: var(--bitcoin-orange-hover) !important;
+}
+
+/* Background Utilities */
+.bg-gray-50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-gray-100 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.bg-gray-800 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.bg-gray-900 {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-gray-700 {
+  background-color: var(--bg-accent) !important;
+}
+
+/* High-tech gradient backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, 
+    var(--bitcoin-orange) 0%, 
+    #667eea 50%, 
+    #764ba2 100%) !important;
+}
+
+/* Status backgrounds */
+.bg-blue-50 {
+  background-color: var(--info-bg) !important;
+}
+
+.bg-green-50 {
+  background-color: var(--success-bg) !important;
+}
+
+.bg-purple-50 {
+  background-color: var(--info-bg) !important;
+}
+
+.bg-orange-50 {
+  background-color: var(--bitcoin-orange-light) !important;
+}
+
+.bg-red-50 {
+  background-color: var(--error-bg) !important;
+}
+
+/* Theme toggle specific styles */
+.theme-toggle-button {
+  background-color: var(--bg-primary);
+  border-color: var(--border-primary);
+  color: var(--text-primary);
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-secondary);
+}
+
+/* ============================================
+   BEAUTIFUL DARK MODE ENHANCEMENTS
+   ============================================ */
+
+/* Enhanced backdrop and layering */
+[data-theme="dark"] body {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background-attachment: fixed;
+}
+
+/* Beautiful card styling with elevation */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .chart-container {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+  backdrop-filter: var(--backdrop-blur);
+  position: relative;
+}
+
+/* Add subtle glow to elevated elements */
+[data-theme="dark"] .bg-white::before,
+[data-theme="dark"] .chart-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, 
+    rgba(148, 163, 184, 0.1) 0%, 
+    rgba(71, 85, 105, 0.05) 50%, 
+    rgba(15, 23, 42, 0.1) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Enhanced interactive states */
+[data-theme="dark"] button:hover,
+[data-theme="dark"] .chart-container:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl), var(--glow-subtle);
+  border-color: var(--border-accent) !important;
+}
+
+/* Beautiful input styling */
+[data-theme="dark"] input {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-primary) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] input:focus {
+  background: var(--bg-tertiary) !important;
+  border-color: var(--border-interactive) !important;
+  box-shadow: 0 0 0 3px var(--bitcoin-orange-light), 
+              inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhanced Bitcoin orange elements */
+[data-theme="dark"] .bg-blue-600,
+[data-theme="dark"] .bg-orange-500 {
+  background: linear-gradient(135deg, var(--bitcoin-orange) 0%, var(--bitcoin-orange-hover) 100%) !important;
+  box-shadow: var(--glow-bitcoin);
+  border: none !important;
+}
+
+[data-theme="dark"] .bg-blue-600:hover,
+[data-theme="dark"] .bg-orange-500:hover {
+  background: linear-gradient(135deg, var(--bitcoin-orange-hover) 0%, #ffb347 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg), var(--glow-bitcoin);
+}
+
+/* Beautiful status indicators */
+[data-theme="dark"] .bg-blue-50 {
+  background: var(--info-bg) !important;
+  border: 1px solid var(--info-border) !important;
+  box-shadow: inset 0 1px 2px rgba(59, 130, 246, 0.1) !important;
+}
+
+[data-theme="dark"] .bg-green-50 {
+  background: var(--success-bg) !important;
+  border: 1px solid var(--success-border) !important;
+  box-shadow: inset 0 1px 2px rgba(16, 185, 129, 0.1) !important;
+}
+
+[data-theme="dark"] .bg-orange-50 {
+  background: var(--bitcoin-orange-light) !important;
+  border: 1px solid var(--border-interactive) !important;
+  box-shadow: inset 0 1px 2px var(--bitcoin-orange-glow) !important;
+}
+
+[data-theme="dark"] .bg-red-50 {
+  background: var(--error-bg) !important;
+  border: 1px solid var(--error-border) !important;
+  box-shadow: inset 0 1px 2px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Enhanced text styling */
+[data-theme="dark"] .font-mono {
+  color: #fbbf24;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Beautiful canvas/chart styling - perfectly integrated */
+[data-theme="dark"] canvas {
+  background: var(--bg-primary) !important;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-primary);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+[data-theme="dark"] canvas:hover {
+  box-shadow: var(--shadow-lg), var(--glow-subtle);
+  transform: translateY(-1px);
+}
+
+/* Ensure chart containers have consistent styling */
+[data-theme="dark"] .chart-container canvas {
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+}
+
+/* Enhanced welcome section gradient */
+[data-theme="dark"] .bg-gradient-to-r {
+  background: linear-gradient(135deg, 
+    rgba(247, 147, 26, 0.9) 0%, 
+    rgba(59, 130, 246, 0.8) 50%, 
+    rgba(147, 51, 234, 0.9) 100%) !important;
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-xl), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle animation for theme transition */
+[data-theme="dark"] * {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced theme toggle button */
+[data-theme="dark"] .theme-toggle-button {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-secondary) !important;
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .theme-toggle-button:hover {
+  background: var(--bg-accent) !important;
+  border-color: var(--border-accent) !important;
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg), var(--glow-subtle);
+}
+
+/* ============================================
+   RESPONSIVE DARK MODE
+   ============================================ */
+
+@media (max-width: 768px) {
+  [data-theme="dark"] .chart-container {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  [data-theme="dark"] {
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --border-primary: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Focus indicators for accessibility */
+[data-theme="dark"] *:focus {
+  outline: 2px solid var(--bitcoin-orange);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ENHANCED UX ANIMATIONS & MICRO-INTERACTIONS
+   ============================================ */
+
+/* Slide-in animation for results */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.6s ease-out;
+}
+
+/* Enhanced hover effects for cards */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] .hover-lift:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced button hover states */
+button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Smooth color transitions for preset buttons */
+.preset-button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.preset-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.preset-button:hover::before {
+  left: 100%;
+}
+
+/* Enhanced input focus states */
+input:focus {
+  transform: scale(1.02);
+  transition: all 0.2s ease;
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(135deg, var(--bitcoin-orange), #ff6b35);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Enhanced typography hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+}
+
+.text-hero {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+@media (max-width: 768px) {
+  .text-hero {
+    font-size: 2.5rem;
+  }
+}
+
+/* Enhanced spacing system */
+.space-y-12 > * + * {
+  margin-top: 3rem;
+}
+
+/* Beautiful progress bars */
+.progress-bar {
+  height: 8px;
+  background: var(--bg-accent);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--bitcoin-orange), #ff6b35);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Enhanced status indicators */
+.status-indicator {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.status-indicator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 2px var(--success-bg);
+}
+
+/* Enhanced loading spinner */
+.spinner-enhanced {
+  border: 3px solid var(--border-primary);
+  border-top: 3px solid var(--bitcoin-orange);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

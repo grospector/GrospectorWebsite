@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Wealth Comparison</title>
+    <meta name="description" content="Compare your Bitcoin wealth against global distribution">
+    <meta name="keywords" content="bitcoin, wealth, comparison, cryptocurrency, distribution">
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: wss:; worker-src 'self'; child-src 'self';">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="credentialless">
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    
+    <!-- Tailwind CSS with Dark Mode Support -->
+    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'bitcoin-orange': '#F7931A'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Theme CSS -->
+    <link href="./src/styles/themes.css" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+        }
+        
+        .font-mono {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+        }
+        
+        .bitcoin-orange {
+            color: var(--bitcoin-orange);
+        }
+        
+        .bg-bitcoin-orange {
+            background-color: var(--bitcoin-orange);
+        }
+        
+        .border-bitcoin-orange {
+            border-color: var(--bitcoin-orange);
+        }
+        
+        .loading-spinner {
+            border: 4px solid var(--border-primary);
+            border-top: 4px solid var(--bitcoin-orange);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .chart-container {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-primary);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    
+    <!-- Loading fallback -->
+    <noscript>
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="text-center">
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">JavaScript Required</h1>
+                <p class="text-gray-600">This application requires JavaScript to be enabled to function properly.</p>
+            </div>
+        </div>
+    </noscript>
+    
+    <!-- Initial loading state -->
+    <div id="loading-screen" class="fixed inset-0 flex items-center justify-center z-50" style="background-color: var(--bg-secondary);">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <h2 class="text-xl font-semibold mb-2" style="color: var(--text-primary);">Loading Bitcoin Wealth Comparison</h2>
+            <p style="color: var(--text-secondary);">Initializing secure calculations...</p>
+        </div>
+    </div>
+    
+    <script>
+        // CSS Loading verification with timeout to prevent infinite loops - FIXED
+        function waitForCSS() {
+            return new Promise((resolve) => {
+                let attempts = 0;
+                const maxAttempts = 20; // Reduced from 100 to 20 (1 second max)
+                
+                function checkCSS() {
+                    attempts++;
+                    
+                    // If we've tried too many times, just resolve to prevent hanging
+                    if (attempts >= maxAttempts) {
+                        console.warn('⚠️ CSS loading timeout - proceeding without verification');
+                        resolve();
+                        return;
+                    }
+                    
+                    try {
+                        // Use document.head instead of body to avoid DOM manipulation
+                        const computedStyle = window.getComputedStyle(document.documentElement);
+                        const bgPrimary = computedStyle.getPropertyValue('--bg-primary');
+                        
+                        if (bgPrimary && bgPrimary.trim() !== '') {
+                            console.log('✅ CSS loaded successfully:', bgPrimary.trim());
+                            resolve();
+                        } else {
+                            // Use requestAnimationFrame instead of setTimeout for better performance
+                            requestAnimationFrame(() => {
+                                setTimeout(checkCSS, 50);
+                            });
+                        }
+                    } catch (error) {
+                        console.error('🔴 CSS check error:', error);
+                        // Resolve immediately on error to prevent hanging
+                        resolve();
+                    }
+                }
+                
+                checkCSS();
+            });
+        }
+
+        // Non-blocking theme application
+        function applyThemeQuickly(theme) {
+            try {
+                const html = document.documentElement;
+                
+                // Use requestAnimationFrame to ensure non-blocking execution
+                requestAnimationFrame(() => {
+                    html.setAttribute('data-theme', theme);
+                    
+                    if (theme === 'dark') {
+                        html.classList.add('dark');
+                    } else {
+                        html.classList.remove('dark');
+                    }
+                    
+                    console.log('✅ Theme applied quickly:', theme);
+                });
+            } catch (error) {
+                console.warn('⚠️ Quick theme application failed:', error);
+            }
+        }
+
+        // Initialize theme with timeout protection
+        async function initializeTheme() {
+            try {
+                // Get stored theme immediately (don't wait for CSS)
+                const storedTheme = localStorage.getItem('bitcoin-wealth-theme') || 'light';
+                
+                // Apply theme immediately for instant feedback
+                applyThemeQuickly(storedTheme);
+                
+                // Wait for CSS with timeout protection
+                const cssPromise = waitForCSS();
+                const timeoutPromise = new Promise(resolve => setTimeout(resolve, 3000)); // 3s max
+                
+                await Promise.race([cssPromise, timeoutPromise]);
+                
+                // Re-apply theme after CSS is confirmed loaded
+                applyThemeQuickly(storedTheme);
+                
+            } catch (error) {
+                console.warn('⚠️ Theme initialization error:', error);
+                // Apply default theme as fallback
+                applyThemeQuickly('light');
+            }
+        }
+
+        // Non-blocking loading screen management
+        function hideLoadingScreen() {
+            try {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    // Use transform instead of opacity for better performance
+                    loadingScreen.style.transform = 'translateY(-100%)';
+                    loadingScreen.style.transition = 'transform 0.3s ease-out';
+                    
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                    }, 300);
+                }
+            } catch (error) {
+                console.warn('⚠️ Loading screen hide error:', error);
+            }
+        }
+
+        // Fast startup with protection against hanging
+        window.addEventListener('DOMContentLoaded', function() {
+            // Start theme initialization immediately
+            initializeTheme().catch(error => {
+                console.warn('⚠️ Theme init failed:', error);
+            });
+            
+            // Hide loading screen after short delay regardless of theme status
+            setTimeout(hideLoadingScreen, 500);
+        });
+    </script>
+</body>
+</html>

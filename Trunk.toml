@@ -1,0 +1,31 @@
+[build]
+target = "index.html"
+dist = "dist"
+public_url = "/"
+# Enable source maps for debugging
+filehash = false
+
+[build.rust]
+# Enable debug symbols and source maps
+debug = true
+opt_level = "z"
+
+[watch]
+watch = ["src", "index.html", "Cargo.toml", ".vscode"]
+ignore = ["dist", "target", ".chrome-debug"]
+
+[serve]
+address = "127.0.0.1"
+port = 8080
+open = false
+# Enable CORS for debugging
+headers = { "Cross-Origin-Embedder-Policy" = "require-corp", "Cross-Origin-Opener-Policy" = "same-origin" }
+
+[clean]
+dist = "dist"
+cargo = true
+
+# Tools for debugging and development
+[tools]
+wasm-bindgen = "0.2"
+wasm-opt = "0.116"

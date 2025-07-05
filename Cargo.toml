@@ -1,0 +1,69 @@
+[package]
+name = "bitcoin-wealth-comparison"
+version = "0.1.0"
+edition = "2021"
+description = "A Bitcoin wealth comparison tool built with Rust and WebAssembly"
+license = "MIT"
+repository = "https://github.com/your-username/bitcoin-wealth-comparison"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+# Web framework
+yew = { version = "0.21", features = ["csr"] }
+
+# WebAssembly bindings
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = "0.3"
+js-sys = "0.3"
+
+# HTTP client for API calls
+reqwest = { version = "0.12", features = ["json"] }
+gloo-net = { version = "0.4", features = ["http"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Styling
+stylist = { version = "0.12", features = ["yew"] }
+
+# Charts and visualization
+plotters = { version = "0.3", default-features = false, features = ["datetime", "evcxr", "evcxr_bitmap", "svg_backend", "bitmap_backend"] }
+plotters-canvas = "0.3"
+
+# Utilities
+gloo-timers = { version = "0.3", features = ["futures"] }
+gloo-utils = "0.2"
+log = "0.4"
+wasm-logger = "0.2"
+
+# Math and calculations
+# statrs = "0.16"
+
+[dependencies.getrandom]
+version = "0.2"
+features = ["js"]
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3"
+
+[profile.dev]
+# Enable debug info for WASM debugging
+debug = true
+opt-level = 0
+overflow-checks = true
+panic = "abort"
+
+[profile.release]
+# Optimize for size and speed
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+debug = false
+
+[profile.dev.package."*"]
+opt-level = 2
