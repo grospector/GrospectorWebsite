@@ -248,6 +248,47 @@ impl WealthCategory {
         }
     }
     
+    /// Get the emoji representation for each wealth category
+    pub fn emoji(&self) -> &'static str {
+        match self {
+            WealthCategory::Dust => "🟫",        // Brown square representing dust particles
+            WealthCategory::Shrimp => "🦐",      // Shrimp - small sea creature
+            WealthCategory::Crab => "🦀",        // Crab - medium sea creature
+            WealthCategory::Fish => "🐟",        // Fish - swimming creature
+            WealthCategory::Dolphin => "🐬",     // Dolphin - intelligent marine mammal
+            WealthCategory::Shark => "🦈",       // Shark - powerful predator
+            WealthCategory::Whale => "🐋",       // Whale - large marine creature
+            WealthCategory::Humpback => "🐳",    // Special whale for ultimate tier
+        }
+    }
+    
+    /// Get a descriptive explanation of the wealth category
+    pub fn description(&self) -> &'static str {
+        match self {
+            WealthCategory::Dust => "Minimal Bitcoin holdings - every satoshi counts!",
+            WealthCategory::Shrimp => "Small but steady - you're building your Bitcoin stack!",
+            WealthCategory::Crab => "Solid foundation - you're moving sideways and up!",
+            WealthCategory::Fish => "Swimming with purpose - great Bitcoin accumulation!",
+            WealthCategory::Dolphin => "Intelligent holder - significant Bitcoin wealth!",
+            WealthCategory::Shark => "Apex Bitcoin holder - you're in the elite tier!",
+            WealthCategory::Whale => "Bitcoin whale - massive holdings that move markets!",
+            WealthCategory::Humpback => "Ultimate Bitcoin titan - legendary wealth status!",
+        }
+    }
+    
+    /// Get the Bitcoin range for this category as a formatted string
+    pub fn btc_range(&self) -> &'static str {
+        match self {
+            WealthCategory::Dust => "< 0.001 BTC",
+            WealthCategory::Shrimp => "0.001 - 0.01 BTC",
+            WealthCategory::Crab => "0.01 - 0.1 BTC",
+            WealthCategory::Fish => "0.1 - 1 BTC",
+            WealthCategory::Dolphin => "1 - 10 BTC",
+            WealthCategory::Shark => "10 - 100 BTC",
+            WealthCategory::Whale => "100 - 1000 BTC",
+            WealthCategory::Humpback => "1000+ BTC",
+        }
+    }
     
     #[allow(dead_code)]
     pub fn color_class(&self) -> &'static str {

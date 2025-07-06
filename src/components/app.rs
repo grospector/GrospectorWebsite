@@ -393,6 +393,16 @@ pub fn app() -> Html {
                                         placeholder="0.00000000"
                                         value={app_data.user_input.clone()}
                                         oninput={on_input_change}
+                                        onkeypress={{
+                                            let on_calculate_clone = on_calculate.clone();
+                                            let app_data_clone = app_data.clone();
+                                            Callback::from(move |e: KeyboardEvent| {
+                                                if e.key() == "Enter" && !app_data_clone.user_input.is_empty() && !app_data_clone.is_calculating {
+                                                    e.prevent_default();
+                                                    on_calculate_clone.emit(MouseEvent::new("click").unwrap());
+                                                }
+                                            })
+                                        }}
                                         class="w-full p-4 pr-16 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent font-mono text-lg transition-all duration-200 hover:border-orange-300 dark:hover:border-orange-600"
                                     />
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
@@ -460,7 +470,7 @@ pub fn app() -> Html {
                                 
                                 <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white transform hover:scale-105 transition-transform duration-300 shadow-lg">
                                     <div class="flex items-center justify-between mb-2">
-                                        <div class="text-3xl">{"🐋"}</div>
+                                        <div class="text-3xl">{result.wealth_category.emoji()}</div>
                                         <div class="text-xs opacity-75 bg-white/20 px-2 py-1 rounded-full">{"CATEGORY"}</div>
                                     </div>
                                     <div class="text-2xl font-bold mb-1">{result.wealth_category.as_str()}</div>
@@ -511,28 +521,16 @@ pub fn app() -> Html {
                                     </div>
                                     <div class="text-center">
                                         <div class="text-6xl mb-3">
-                                            {if result.percentile >= 99.0 { "🐋" } 
-                                             else if result.percentile >= 95.0 { "🦈" }
-                                             else if result.percentile >= 90.0 { "🐬" }
-                                             else if result.percentile >= 75.0 { "🐟" }
-                                             else if result.percentile >= 50.0 { "🦀" }
-                                             else { "🦐" }}
+                                            {result.wealth_category.emoji()}
                                         </div>
                                         <div class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                                            {if result.percentile >= 99.0 { "Bitcoin Whale!" } 
-                                             else if result.percentile >= 95.0 { "Bitcoin Shark!" }
-                                             else if result.percentile >= 90.0 { "Bitcoin Dolphin!" }
-                                             else if result.percentile >= 75.0 { "Bitcoin Fish!" }
-                                             else if result.percentile >= 50.0 { "Bitcoin Crab!" }
-                                             else { "Bitcoin Shrimp!" }}
+                                            {format!("Bitcoin {}!", result.wealth_category.as_str())}
+                                        </div>
+                                        <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            {result.wealth_category.btc_range()}
                                         </div>
                                         <p class="text-sm text-gray-600 dark:text-gray-400">
-                                            {if result.percentile >= 99.0 { "You're in the top 1% of Bitcoin holders!" } 
-                                             else if result.percentile >= 95.0 { "You're in the top 5% of Bitcoin holders!" }
-                                             else if result.percentile >= 90.0 { "You're in the top 10% of Bitcoin holders!" }
-                                             else if result.percentile >= 75.0 { "You're in the top 25% of Bitcoin holders!" }
-                                             else if result.percentile >= 50.0 { "You're above the median Bitcoin holder!" }
-                                             else { "Every satoshi counts! Keep stacking!" }}
+                                            {result.wealth_category.description()}
                                         </p>
                                     </div>
                                 </div>
@@ -588,13 +586,48 @@ pub fn app() -> Html {
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {for thresholds.iter().map(|(percentile, amount)| {
-                                        let (bg_color, text_color, border_color) = match *percentile {
-                                            p if p >= 99.0 => ("from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20", "purple-600 dark:text-purple-400", "purple-200 dark:border-purple-700"),
-                                            p if p >= 95.0 => ("from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20", "red-600 dark:text-red-400", "red-200 dark:border-red-700"),
-                                            p if p >= 90.0 => ("from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20", "orange-600 dark:text-orange-400", "orange-200 dark:border-orange-700"),
-                                            p if p >= 75.0 => ("from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20", "yellow-600 dark:text-yellow-400", "yellow-200 dark:border-yellow-700"),
-                                            p if p >= 50.0 => ("from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20", "green-600 dark:text-green-400", "green-200 dark:border-green-700"),
-                                            _ => ("from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20", "blue-600 dark:text-blue-400", "blue-200 dark:border-blue-700"),
+                                        // Get the appropriate wealth category based on the amount threshold
+                                        use crate::types::bitcoin::WealthCategory;
+                                        let wealth_category = WealthCategory::from_btc_amount(*amount);
+                                        
+                                        // Enhanced high-contrast color system for dark mode visibility with systematic emoji
+                                        let (bg_color, text_primary, text_secondary, border_color) = match *percentile {
+                                            p if p >= 99.0 => (
+                                                "from-orange-50 to-orange-100 dark:from-gray-800 dark:to-gray-700",
+                                                "text-orange-900 dark:text-orange-300",
+                                                "text-orange-700 dark:text-orange-400", 
+                                                "border-orange-200 dark:border-orange-600"
+                                            ),
+                                            p if p >= 95.0 => (
+                                                "from-orange-50 to-yellow-50 dark:from-gray-800 dark:to-gray-700",
+                                                "text-orange-900 dark:text-yellow-300",
+                                                "text-orange-700 dark:text-yellow-400",
+                                                "border-orange-200 dark:border-yellow-600"
+                                            ),
+                                            p if p >= 90.0 => (
+                                                "from-yellow-50 to-amber-50 dark:from-gray-800 dark:to-gray-700",
+                                                "text-amber-900 dark:text-amber-300", 
+                                                "text-amber-700 dark:text-amber-400",
+                                                "border-amber-200 dark:border-amber-600"
+                                            ),
+                                            p if p >= 75.0 => (
+                                                "from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-700",
+                                                "text-emerald-900 dark:text-emerald-300",
+                                                "text-emerald-700 dark:text-emerald-400", 
+                                                "border-emerald-200 dark:border-emerald-600"
+                                            ),
+                                            p if p >= 50.0 => (
+                                                "from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700",
+                                                "text-cyan-900 dark:text-cyan-300",
+                                                "text-cyan-700 dark:text-cyan-400",
+                                                "border-cyan-200 dark:border-cyan-600"
+                                            ),
+                                            _ => (
+                                                "from-slate-50 to-gray-50 dark:from-gray-800 dark:to-gray-700",
+                                                "text-slate-900 dark:text-slate-200",
+                                                "text-slate-700 dark:text-slate-400", 
+                                                "border-slate-200 dark:border-slate-600"
+                                            ),
                                         };
 
                                         let amount_text = if *amount >= 1.0 {
@@ -606,10 +639,22 @@ pub fn app() -> Html {
                                         };
 
                                         html! {
-                                            <div class={format!("bg-gradient-to-br {} rounded-lg p-4 border border-{}", bg_color, border_color)}>
-                                                <div class={format!("text-sm font-medium text-{} mb-1", text_color)}>{format!("{:.1}th Percentile", percentile)}</div>
-                                                <div class={format!("text-xl font-bold text-{} mb-1", text_color.replace(" dark:text-", " dark:text-").replace("-400", "-900").replace("-600", "-900"))}>{amount_text}</div>
-                                                <div class={format!("text-xs text-{}", text_color)}>{"Minimum to reach this percentile"}</div>
+                                            <div class={format!("bg-gradient-to-br {} rounded-xl p-5 border-2 {} transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl", bg_color, border_color)}>
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="text-2xl">{wealth_category.emoji()}</div>
+                                                    <div class={format!("text-xs font-semibold {} px-3 py-1 rounded-full bg-white/20 dark:bg-black/20", text_secondary)}>
+                                                        {format!("{:.1}%", percentile)}
+                                                    </div>
+                                                </div>
+                                                <div class={format!("text-2xl font-black {} mb-2 tracking-tight", text_primary)}>
+                                                    {amount_text}
+                                                </div>
+                                                <div class={format!("text-sm font-medium {} mb-1", text_secondary)}>
+                                                    {format!("{:.1}th Percentile", percentile)}
+                                                </div>
+                                                <div class={format!("text-xs {} opacity-90", text_secondary)}>
+                                                    {"Minimum threshold"}
+                                                </div>
                                             </div>
                                         }
                                     })}

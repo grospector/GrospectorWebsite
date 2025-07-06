@@ -370,6 +370,108 @@ input:focus {
   box-shadow: var(--shadow-lg), var(--glow-bitcoin);
 }
 
+/* ============================================
+   ENHANCED PERCENTILE THRESHOLD CARDS
+   ============================================ */
+
+/* High-contrast dark mode text for percentile cards */
+[data-theme="dark"] .text-orange-300,
+[data-theme="dark"] .text-yellow-300,
+[data-theme="dark"] .text-amber-300,
+[data-theme="dark"] .text-emerald-300,
+[data-theme="dark"] .text-cyan-300,
+[data-theme="dark"] .text-slate-200 {
+  color: #f8fafc !important; /* Use primary text color for maximum contrast */
+  font-weight: 900 !important; /* Make text extra bold for readability */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important; /* Add text shadow for depth */
+}
+
+/* Enhanced secondary text for percentile cards */
+[data-theme="dark"] .text-orange-400,
+[data-theme="dark"] .text-yellow-400,
+[data-theme="dark"] .text-amber-400,
+[data-theme="dark"] .text-emerald-400,
+[data-theme="dark"] .text-cyan-400,
+[data-theme="dark"] .text-slate-400 {
+  color: #e2e8f0 !important; /* Use secondary text color for good contrast */
+  font-weight: 600 !important; /* Medium bold for secondary text */
+}
+
+/* Enhanced card backgrounds for better contrast */
+[data-theme="dark"] .dark\:from-gray-800 {
+  background: var(--bg-tertiary) !important;
+  border: 1px solid var(--border-secondary) !important;
+  box-shadow: var(--shadow-lg), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Enhanced border colors for dark mode */
+[data-theme="dark"] .dark\:border-orange-600,
+[data-theme="dark"] .dark\:border-yellow-600,
+[data-theme="dark"] .dark\:border-amber-600,
+[data-theme="dark"] .dark\:border-emerald-600,
+[data-theme="dark"] .dark\:border-cyan-600,
+[data-theme="dark"] .dark\:border-slate-600 {
+  border-color: var(--border-accent) !important;
+  border-width: 2px !important;
+}
+
+/* Enhanced hover effects for percentile cards */
+[data-theme="dark"] .hover\:scale-105:hover {
+  transform: scale(1.05) translateY(-2px) !important;
+  box-shadow: var(--shadow-xl), 
+              0 0 30px rgba(247, 147, 26, 0.2) !important;
+  border-color: var(--bitcoin-orange) !important;
+}
+
+/* Enhanced badge styling in dark mode */
+[data-theme="dark"] .dark\:bg-black\/20 {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Better visual hierarchy with font weights */
+[data-theme="dark"] .font-black {
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+}
+
+[data-theme="dark"] .font-semibold {
+  font-weight: 700 !important;
+}
+
+/* Enhanced rounded corners for modern look */
+.rounded-xl {
+  border-radius: 1rem !important;
+}
+
+/* Improved tracking for better readability */
+.tracking-tight {
+  letter-spacing: -0.025em !important;
+}
+
+/* Enhanced shadow system for cards */
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="dark"] .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-theme="dark"] .hover\:shadow-xl:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.4) !important;
+}
+
 /* Beautiful status indicators */
 [data-theme="dark"] .bg-blue-50 {
   background: var(--info-bg) !important;
